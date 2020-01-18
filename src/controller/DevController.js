@@ -30,7 +30,7 @@ module.exports = {
 
    // se não existir cadastra.
    if (!dev) {
-
+   
     const response = await axios.get(`https://api.github.com/users/${github_username}`);
 
     // name não e obrigado no github, caso o usuário não tenha ,cadastramos o login
@@ -58,10 +58,11 @@ module.exports = {
     // e que o novo dev tenha pelo menos uma das tecnologias filtradas
     const sendSocketMessageTo = findConnections({ latitude, longitude }, techsArray);
     sendMessage(sendSocketMessageTo, 'new-dev', dev);
+
+    return res.json(dev);
+   } else {
+    return;
    }
-
-   return res.json(dev);
-
   } catch (error) {
    console.log(error);
   }
