@@ -56,7 +56,7 @@ module.exports = {
 
     // Filtrar as conexões que estão há no máximo 10 km de distancia 
     // e que o novo dev tenha pelo menos uma das tecnologias filtradas
-    const sendSocketMessageTo = findConnections({latitude, longitude}, techsArray);
+    const sendSocketMessageTo = findConnections({ latitude, longitude }, techsArray);
     sendMessage(sendSocketMessageTo, 'new-dev', dev);
    }
 
@@ -68,7 +68,33 @@ module.exports = {
 
  },
 
+ // deletando um dev do BD
+ async destroy(req, res) {
 
+  await Dev.findByIdAndDelete(req.params.id);
 
+  return res.send();
+ },
 
+ // atualizando informações do dev no BD
+ async update(req, res) {
+  const { techs, bio, name, latitude, longitude } = req.body;
+
+  const arrayTechs = parseStringAsArray(techs);
+
+  // preparando as coordenadas para cadastrar no BD
+  const location = {
+   type: 'Point',
+   coordinates: [longitude, latitude],
+  }
+
+  const devUpdated = await Dev.findByIdAndUpdate(req.params.id, {
+   name,
+   bio,
+   location,
+   techs: arrayTechs
+  }, { new: true })
+
+  return res.json(devUpdated);
+ }
 }
