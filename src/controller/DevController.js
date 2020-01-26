@@ -19,6 +19,12 @@ module.exports = {
   return res.json(devs);
  },
 
+ //listando um dev através do id
+ async show(req,res){
+   const dev = await Dev.findById(req.params.id);
+   return res.json(dev);
+ },
+
  // cadastrando dev no BD
  async store(req, res) {
   try {
